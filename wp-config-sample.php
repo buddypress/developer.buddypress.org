@@ -79,8 +79,8 @@ $table_prefix  = 'wp_';
  */
 define('WP_DEBUG', true);
 
-define( 'WPORGPATH', __DIR__ . '/wp-content/themes/' );
-define( 'WP_CORE_LATEST_RELEASE', '2.5.0' );
+define( 'BPORGPATH', __DIR__ . '/wp-content/themes/' );
+define( 'BP_CORE_LATEST_RELEASE', '2.5.0' );
 
 /* That's all, stop editing! Happy blogging. */
 
