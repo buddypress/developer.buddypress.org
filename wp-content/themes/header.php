@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
 <head profile="http://gmpg.org/xfn/11">
 <meta charset="utf-8" />
-<meta name="google-site-verification" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BuddyPress</title>
 <meta name="referrer" content="always">
