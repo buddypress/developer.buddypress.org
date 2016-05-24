@@ -11,21 +11,6 @@
 <link media="only screen and (max-device-width: 480px)" href="//s.w.org/style/iphone.css?1" type="text/css" rel="stylesheet" />
 <link rel="shortcut icon" href="//s.w.org/favicon.ico?2" type="image/x-icon" />
 
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', '']);
-_gaq.push(['_setDomainName', 'buddypress.org']);
-_gaq.push(['_trackPageview']);
-(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-function recordOutboundLink(link, category, action) {
-	_gaq.push(['_trackEvent', category, action])
-	setTimeout('document.location = "' + link.href + '"', 100);
-}
-</script>
 <!--[if lte IE 8]>
 <style type="text/css">
 @import url("//s.w.org/style/ie.css?1");
