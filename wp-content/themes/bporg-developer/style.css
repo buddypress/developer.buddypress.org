@@ -23,6 +23,14 @@ along with Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normali
 and Blueprint http://www.blueprintcss.org/
 */
 
+#header {
+	position: static;
+}
+
 #header-inner h1 {
 	clear: none;
+}
+
+.devhub-wrap .site-header {
+	margin-bottom: 2em;
 }
