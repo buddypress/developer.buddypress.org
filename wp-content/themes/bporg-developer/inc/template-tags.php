@@ -183,7 +183,7 @@ namespace {
 
 }
 
-namespace DevHub {
+namespace BuddyDevHub {
 
 	function wp_doc_comment( $comment, $args, $depth ) {
 		?>
