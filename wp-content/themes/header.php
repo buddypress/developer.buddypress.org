@@ -27,12 +27,6 @@ var toggleMenu = function(){
 </script>
 <?php wp_head(); ?>
 
-<link rel='stylesheet' id='bp-legacy-css-css'  href='https://buddypress.org/wp-content/plugins/buddypress/bp-templates/bp-legacy/css/buddypress.min.css?ver=2.6.0-alpha' type='text/css' media='screen' />
-<link rel='stylesheet' id='bbp-default-css'  href='https://buddypress.org/wp-content/plugins/bbpress/templates/default/css/bbpress.min.css?ver=2.6-alpha-5566' type='text/css' media='screen' />
-<link rel='stylesheet' id='bb-base-css'  href='https://buddypress.org/wp-content/themes/bb-base/style.css?ver=201601200001' type='text/css' media='screen' />
-<link rel='stylesheet' id='bb-root-css'  href='https://buddypress.org/wp-content/themes/bb-base/style-buddypress.css?ver=201601200001' type='text/css' media='screen' />
-<link rel='stylesheet' id='bb-child-css'  href='https://buddypress.org/wp-content/themes/buddypress-org/style.css?ver=201601200001' type='text/css' media='screen' />
-
 </head>
 
 <body id="top" <?php body_class(); ?>>
