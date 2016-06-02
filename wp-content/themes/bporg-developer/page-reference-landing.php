@@ -35,14 +35,14 @@ get_header(); ?>
 
 				<div class="new-in-guide section two-columns clear">
 					<div class="widget box gray">
-						<h3 class="widget-title"><?php $version = DevHub\get_current_version_term(); printf( __( 'New &amp; Updated in BuddyPress %s:', 'wporg' ), substr( $version->name, 0, -2 ) ); ?></h3>
+						<h3 class="widget-title"><?php $version = BuddyDevHub\get_current_version_term(); printf( __( 'New &amp; Updated in BuddyPress %s:', 'wporg' ), substr( $version->name, 0, -2 ) ); ?></h3>
 						<div class="widget-content">
 							<ul class="unordered-list no-bullets">
 								<?php
 
 								$list = new WP_Query( array(
 									'posts_per_page' => 13,
-									'post_type'      => DevHub\get_parsed_post_types(),
+									'post_type'      => BuddyDevHub\get_parsed_post_types(),
 									'orderby'        => 'title',
 									'order'          => 'ASC',
 									'tax_query'      => array( array(
