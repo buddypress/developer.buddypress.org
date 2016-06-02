@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/inc/template-tags.php';
+
 function bporg_developer_enqueue_css() {
 	$parent = 'wpdeveloper';
 	$child = 'bpdeveloper';
