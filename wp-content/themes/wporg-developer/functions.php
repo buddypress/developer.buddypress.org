@@ -71,6 +71,16 @@ require __DIR__ . '/inc/redirects.php';
 require __DIR__ . '/inc/formatting.php';
 
 /**
+ * Autocomplete.
+ */
+require __DIR__ . '/inc/autocomplete.php';
+
+/**
+ * Search query.
+ */
+require __DIR__ . '/inc/search.php';
+
+/**
  * Set the content width based on the theme's design and stylesheet.
  */
 if ( ! isset( $content_width ) ) {
@@ -90,9 +100,8 @@ function init() {
 	add_action( 'wp_head', __NAMESPACE__ . '\\header_js' );
 	add_action( 'add_meta_boxes', __NAMESPACE__ . '\\rename_comments_meta_box', 10, 2 );
 
-	add_filter( 'post_type_link', __NAMESPACE__ . '\\method_permalink', 10, 2 );
+	add_filter( 'post_type_link', __NAMESPACE__ . '\\method_permalink', 9, 2 );
 	add_filter( 'term_link', __NAMESPACE__ . '\\taxonomy_permalink', 10, 3 );
-	add_filter( 'the_posts', __NAMESPACE__ . '\\rerun_empty_exact_search', 10, 2 );
 
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'post-thumbnails' );
@@ -186,7 +195,7 @@ function widgets_init() {
  */
 function pre_get_posts( $query ) {
 
-	if ( $query->is_main_query() && ( $query->is_post_type_archive() || $query->is_search() ) ) {
+	if ( $query->is_main_query() && $query->is_post_type_archive() ) {
 		$query->set( 'orderby', 'title' );
 		$query->set( 'order', 'ASC' );
 	}
@@ -195,36 +204,7 @@ function pre_get_posts( $query ) {
 		$query->set( 'wp-parser-source-file', str_replace( array( '.php', '/' ), array( '-php', '_' ), $query->query['wp-parser-source-file'] ) );
 	}
 
-	// If user has '()' at end of a search string, assume they want a specific function/method.
-	if ( $query->is_search() ) {
-		$s = htmlentities( $query->get( 's' ) );
-		if ( '()' === substr( $s, -2 ) ) {
-			// Enable exact search
-			$query->set( 'exact',     true );
-			// Modify the search query to omit the parentheses
-			$query->set( 's',         substr( $s, 0, -2 ) ); // remove '()'
-			// Restrict search to function-like content
-			$query->set( 'post_type', array( 'wp-parser-function', 'wp-parser-method' ) );
-		}
-	}
-}
-
-/**
- * Rerun an exact search with the same criteria except exactness if no posts
- * were found.
- *
- * @access public
- *
- * @param  array    $posts Array of posts after the main query
- * @param  WP_Query $query WP_Query object
- * @return array
- */
-function rerun_empty_exact_search( $posts, $query ) {
-	if ( is_search() && true === $query->get( 'exact' ) && ! $query->found_posts ) {
-		$query->set( 'exact', false );
-		$posts = $query->get_posts();
-	}
-	return $posts;
+	// For search query modifications see DevHub_Search.
 }
 
 function register_nav_menus() {
@@ -235,8 +215,11 @@ function register_nav_menus() {
 }
 
 function method_permalink( $link, $post ) {
-	if ( $post->post_type !== 'wp-parser-method' )
+	global $wp_rewrite;
+
+	if ( ! $wp_rewrite->using_permalinks() || ( 'wp-parser-method' !== $post->post_type ) ) {
 		return $link;
+	}
 
 	list( $class, $method ) = explode( '-', $post->post_name );
 	$link = home_url( user_trailingslashit( "reference/classes/$class/$method" ) );
@@ -244,6 +227,12 @@ function method_permalink( $link, $post ) {
 }
 
 function taxonomy_permalink( $link, $term, $taxonomy ) {
+	global $wp_rewrite;
+
+	if ( ! $wp_rewrite->using_permalinks() ) {
+		return $link;
+	}
+
 	if ( $taxonomy === 'wp-parser-source-file' ) {
 		$slug = $term->slug;
 		if ( substr( $slug, -4 ) === '-php' ) {
@@ -269,7 +258,7 @@ function theme_scripts_styles() {
 	wp_enqueue_style( 'dashicons' );
 	wp_enqueue_style( 'open-sans', '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600' );
 	wp_enqueue_style( 'wporg-developer-style', get_stylesheet_uri(), array(), '2' );
-	wp_enqueue_style( 'wp-dev-sass-compiled', get_template_directory_uri() . '/stylesheets/main.css', array( 'wporg-developer-style' ), '20150618' );
+	wp_enqueue_style( 'wp-dev-sass-compiled', get_template_directory_uri() . '/stylesheets/main.css', array( 'wporg-developer-style' ), '20160524' );
 	wp_enqueue_script( 'wporg-developer-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20120206', true );
 	wp_enqueue_script( 'wporg-developer-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
 	wp_enqueue_script( 'wporg-developer-search', get_template_directory_uri() . '/js/search.js', array(), '20150430', true );

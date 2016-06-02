@@ -4,7 +4,9 @@
 
 	<?php echo get_deprecated(); ?>
 
-	<h1><a href="<?php the_permalink() ?>"><?php echo get_signature(); ?></a></h1>
+	<?php echo get_private_access_message(); ?>
+
+	<h1><?php echo get_signature(); ?></h1>
 
 	<section class="summary">
 		<?php echo get_summary(); ?>
@@ -56,13 +58,13 @@
 			<dd>
 				<p class="desc">
 					<?php if ( ! empty( $param['types'] ) ) : ?>
-					<span class="type">(<?php echo wp_kses_post( $param['types'] ); ?>)</span>
+					<span class="type"><?php printf( __( '(%s)', 'wporg' ), wp_kses_post( $param['types'] ) ); ?></span>
 					<?php endif; ?>
 					<?php if ( ! empty( $param['required'] ) && 'wp-parser-hook' !== get_post_type() ) : ?>
-					<span class="required">(<?php echo esc_html( $param['required'] ); ?>)</span>
+					<span class="required"><?php printf( __( '(%s)', 'wporg' ), esc_html( $param['required'] ) ); ?></span>
 					<?php endif; ?>
 					<?php if ( ! empty( $param['content'] ) ) : ?>
-					<span class="description"><?php echo param_formatting_fixup( wp_kses_post( $param['content'] ) ); ?></span>
+					<span class="description"><?php echo wp_kses_post( $param['content'] ); ?></span>
 					<?php endif; ?>
 				</p>
 				<?php if ( ! empty( $param['default'] ) ) : ?>
@@ -80,7 +82,7 @@
 		?>
 		<hr/>
 		<section class="explanation">
-			<h2><?php _e( 'Explanation', 'wporg' ); ?></h2>
+			<h2><?php _e( 'More Information', 'wporg' ); ?></h2>
 			<?php echo apply_filters( 'the_content', apply_filters( 'get_the_content', $explanation ) ); ?>
 		</section>
 	<?php endif; ?>
@@ -209,7 +211,15 @@
 			<h2><?php _e( 'Changelog', 'wporg' ); ?></h2>
 			<ul>
 				<?php foreach ( $changelog_data as $version => $data ) : ?>
-					<li><?php _e( '<strong>Since:</strong> BuddyPress', 'wporg' ); ?> <a href="<?php echo esc_url( $data['since_url'] ); ?>"><?php echo esc_html( $version ); ?></a> <?php echo $data['description']; // escaped in get_changelog_data() ?></li>
+					<li>
+						<strong><?php _e( 'Since:', 'wporg' ); ?></strong>
+						<?php printf(
+							/* translators: %s: WordPress version */
+							__( 'WordPress %s', 'wporg' ),
+							sprintf( '<a href="%1$s">%2$s</a>', esc_url( $data['since_url'] ), esc_html( $version ) )
+						); ?>
+						<?php echo $data['description']; // escaped in get_changelog_data() ?>
+					</li>
 				<?php endforeach; ?>
 			</ul>
 		</section>

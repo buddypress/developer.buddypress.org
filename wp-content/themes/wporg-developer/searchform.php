@@ -5,7 +5,7 @@
  * @package wporg-developer
  */
 ?>
-<div class="search-section section clear <?php if ( ! is_page( 'reference' ) ) { echo 'hide-if-js'; } ?>">
+<div class="search-section section clear <?php if ( ! ( is_page( 'reference' ) || is_search() ) ) { echo 'hide-if-js'; } ?>">
 
 <?php if ( is_search() ) { ?>
 
@@ -33,7 +33,14 @@
 
 <?php } ?>
 
-	<form role="search" method="get" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+	<?php
+		$is_handbook = get_query_var( 'is_handbook' );
+		$search_url  = get_query_var( 'current_handbook_home_url' );
+		$search_url  = $search_url ? $search_url : home_url( '/' );
+		$form_class  = $is_handbook ? ' searchform-handbook' : '';
+	?>
+
+	<form role="search" method="get" class="searchform<?php echo esc_attr( $form_class ); ?>" action="<?php echo esc_url( $search_url ); ?>">
 		<div>
 		<label>
 			<label for="search-field" class="screen-reader-text"><?php _ex( 'Search for:', 'label', 'wporg' ); ?></label>
@@ -41,6 +48,8 @@
 		</label>
 		<input type="submit" class="shiny-blue search-submit" value="<?php echo esc_attr_x( 'Search', 'submit button', 'wporg' ); ?>">
 		</div>
+
+	<?php if ( ! $is_handbook ) : ?>
 
 		<div class="search-post-type">
 			<span><?php _e( 'Filter by type:', 'wporg' ); ?></span>
@@ -51,13 +60,25 @@
 					'wp-parser-class'    => __( 'Classes',   'wporg' ),
 					'wp-parser-method'   => __( 'Methods',   'wporg' ),
 				);
+				
+				$qv_post_type = array_filter( (array) get_query_var( 'post_type' ) );	
+				$no_filters   = get_query_var( 'empty_post_type_search' );
+
+				if ( ! is_search() || in_array( 'any', $qv_post_type ) || $no_filters ) {
+					// No filters used.
+					$qv_post_type = array();
+				}
+						
 				foreach ( $search_post_types as $post_type => $label ) {
-					$qv_post_type = (array) get_query_var( 'post_type' );
+					$checked = checked( in_array( $post_type, $qv_post_type ), true, false );
 				?>
-					<label><input type="checkbox" name="post_type[]" value="<?php echo esc_attr( $post_type ); ?>"
-					<?php checked( ! is_search() || in_array( 'any', $qv_post_type ) || in_array( $post_type, $qv_post_type ) ); ?> /> <?php echo $label; ?></label>
-				<?php } ?>
+						<label><input type="checkbox" name="post_type[]" value="<?php echo esc_attr( $post_type ); ?>"
+						<?php echo $checked; ?> /> <?php echo $label; ?></label>
+			<?php } ?>
 		</div>
+
+	<?php endif; ?>
+
 	</form>
 
 </div><!-- /search-guide -->

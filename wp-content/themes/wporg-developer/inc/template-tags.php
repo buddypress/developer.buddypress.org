@@ -72,84 +72,6 @@ namespace {
 		}
 	endif;
 
-	if ( ! function_exists( 'wporg_developer_post_nav_via_menu' ) ) :
-		/**
-		 * Outputs previous and/or next post navigation links using the
-		 * specified menu to inform navigation ordering.
-		 *
-		 * @param  string $menu_name The name of the menu to use for nav ordering.
-		 */
-		function wporg_developer_post_nav_via_menu( $menu_name ) {
-			// Get the items for the specified menu
-			if ( ! $menu_items = wp_get_nav_menu_items( $menu_name ) ) {
-				return;
-			}
-
-			// Get ids for all menu objects
-			$menu_ids = wp_list_pluck( $menu_items, 'object_id' );
-
-			// Get current post
-			if ( ! $post = get_post() ) {
-				return;
-			}
-
-			// Index of current post in menu. Return if not in menu.
-			$i = array_search( $post->ID, $menu_ids );
-			if ( false === $i ) {
-				return;
-			}
-
-			// Find the previous post (note: preview menu item may not be a post)
-			$previous = null;
-			for ( $n = $i-1; $n >= 0; $n-- ) {
-				if ( isset( $menu_items[ $n ] ) && is_a( $menu_items[ $n ], 'WP_Post' ) ) {
-					$previous = $menu_items[ $n ];
-					break;
-				}
-			}
-
-			// Find the next post (note: next menu item may not be a post)
-			$next = null;
-			$max = count( $menu_items );
-			for ( $n = $i+1; $n < $max; $n++ ) {
-				if ( isset( $menu_items[ $n ] ) && is_a( $menu_items[ $n ], 'WP_Post' ) ) {
-					$next = $menu_items[ $n ];
-					break;
-				}
-			}
-
-			if ( ! $previous && ! $next ) {
-				return;
-			}
-			?>
-
-			<nav class="navigation post-navigation" role="navigation">
-				<h1 class="screen-reader-text"><?php _e( 'Post navigation', 'wporg' ); ?></h1>
-				<div class="nav-links">
-
-				<?php
-				if ( $previous ) {
-					printf( '<a href="%s" rel="previous"><span class="meta-nav">&larr;</span> %s</a>',
-						esc_url( $previous->url ),
-						esc_html( $previous->title )
-					);
-				}
-
-				if ( $next ) {
-					printf( '<a href="%s" rel="next">%s <span class="meta-nav">&rarr;</span></a>',
-						esc_url( $next->url ),
-						esc_html( $next->title )
-					);
-				}
-				?>
-
-				</div>
-				<!-- .nav-links -->
-			</nav><!-- .navigation -->
-		<?php
-		}
-	endif;
-
 	if ( ! function_exists( 'wporg_developer_user_note' ) ) :
 		/**
 		 * Template for user contributed notes.
@@ -344,7 +266,7 @@ namespace DevHub {
 	 *
 	 * Prefers the 'wp_parser_imported_wp_version' option value set by more
 	 * recent versions of the parser. Failing that, it checks the
-	 * BP_CORE_LATEST_RELEASE constant (set on WP.org) though this is not
+	 * WP_CORE_LATEST_RELEASE constant (set on WordPress.org) though this is not
 	 * guaranteed to be the latest parsed version. Failing that, it uses
 	 * the WP version of the site, unless it isn't a release version, in
 	 * which case a hardcoded value is assumed.
@@ -358,8 +280,8 @@ namespace DevHub {
 		$current_version = get_option( 'wp_parser_imported_wp_version' );
 
 		// Otherwise, assume the value stored in a constant (which is set on WP.org), if defined.
-		if ( empty( $current_version ) && defined( 'BP_CORE_LATEST_RELEASE' ) && BP_CORE_LATEST_RELEASE ) {
-			$current_version = BP_CORE_LATEST_RELEASE;
+		if ( empty( $current_version ) && defined( 'WP_CORE_LATEST_RELEASE' ) && WP_CORE_LATEST_RELEASE ) {
+			$current_version = WP_CORE_LATEST_RELEASE;
 		}
 
 		// Otherwise, use the version of the running WP instance.
@@ -418,15 +340,22 @@ namespace DevHub {
 	/**
 	 * Get an array of all parsed post types.
 	 *
+	 * @param string  $labels If set to 'labels' post types with their labels are returned.
 	 * @return array
 	 */
-	function get_parsed_post_types() {
-		return array(
-			'wp-parser-class',
-			'wp-parser-function',
-			'wp-parser-hook',
-			'wp-parser-method',
+	function get_parsed_post_types( $labels = '' ) {
+		$post_types =  array(
+			'wp-parser-class'    => __( 'Classes',   'wporg' ),
+			'wp-parser-function' => __( 'Functions', 'wporg' ),
+			'wp-parser-hook'     => __( 'Hooks',     'wporg' ),
+			'wp-parser-method'   => __( 'Methods',   'wporg' ),
 		);
+
+		if ( 'labels' !== $labels ) {
+			return array_keys( $post_types );
+		}
+
+		return $post_types;
 	}
 
 	/**
@@ -439,6 +368,22 @@ namespace DevHub {
 		$post_type = $post_type ? $post_type : get_post_type();
 
 		return in_array( $post_type, get_parsed_post_types() );
+	}
+
+	/**
+	 * Get the specific type of hook.
+	 *
+	 * @param int|WP_Post|null $post Optional. Post ID or post object. Default is global $post.
+	 * @return string          Either 'action', 'filter', or an empty string if not a hook post type.
+	 */
+	function get_hook_type( $post = null ) {
+		$hook = '';
+
+		if ( 'wp-parser-hook' === get_post_type( $post ) ) {
+			$hook = get_post_meta( get_post_field( 'ID', $post ), '_wp-parser_hook_type', true );
+		}
+
+		return $hook;
 	}
 
 	/**
@@ -577,7 +522,7 @@ namespace DevHub {
 
 		$signature .= ' (';
 		if ( $args = implode( ', ', $args_strings ) ) {
-			$signature .= $args . ' ';
+			$signature .= $args . '&nbsp;';
 		}
 		$signature .= ')';
 
@@ -610,7 +555,7 @@ namespace DevHub {
 					$params[ $tag['variable'] ] = $tag;
 					$types = array();
 					foreach ( $tag['types'] as $i => $v ) {
-						$types[ $i ] = "<span class=\"{$v}\">{$v}</span>";
+						$types[ $i ] = sprintf( '<span class="%s">%s</span>', $v, apply_filters( 'devhub-parameter-type', $v, $post_id ) );
 					}
 
 					// Normalize spacing at beginning of hash notation params.
@@ -632,8 +577,7 @@ namespace DevHub {
 					} else {
 						$params[ $tag['variable'] ]['required'] = 'Required';
 					}
-					$params[ $tag['variable'] ]['content'] = htmlentities( $params[ $tag['variable'] ]['content'] );
-					$params[ $tag['variable'] ]['content'] = \DevHub_Formatting::make_doclink_clickable( $params[ $tag['variable'] ]['content'] );
+					$params[ $tag['variable'] ]['content'] = \DevHub_Formatting::format_param_description( $params[ $tag['variable'] ]['content'] );
 				}
 			}
 		}
@@ -732,6 +676,7 @@ namespace DevHub {
 		$return      = array_shift( $return );
 		$description = empty( $return['content'] ) ? '' : \DevHub_Formatting::make_doclink_clickable( $return['content'] );
 		$type        = empty( $return['types'] ) ? '' : esc_html( implode( '|', $return['types'] ) );
+		$type        = apply_filters( 'devhub-function-return-type', $type, $post_id );
 
 		return "<span class='return-type'>({$type})</span> $description";
 	}
@@ -758,7 +703,7 @@ namespace DevHub {
 		foreach ( $since_terms as $since_term ) {
 			foreach ( $since_meta as $meta ) {
 				if ( is_array( $meta ) && $since_term->name == $meta['content'] ) {
-					$description = empty( $meta['description'] ) ? '' : '<span class="since-description">' . esc_html( strip_tags( $meta['description'] ) ) . '</span>';
+					$description = empty( $meta['description'] ) ? '' : '<span class="since-description">' . \DevHub_Formatting::format_param_description( $meta['description'] ) . '</span>';
 
 					$data[ $since_term->name ] = array(
 						'version'     => $since_term->name,
@@ -804,36 +749,76 @@ namespace DevHub {
 	}
 
 	/**
-	 * Retrieve deprecated flag
+	 * Retrieve deprecated notice.
 	 *
 	 * @param int $post_id
 	 *
 	 * @return string
 	 */
 	function get_deprecated( $post_id = null ) {
-		if ( empty( $post_id ) ) {
+		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
 
 		$types          = explode( '-', get_post_type( $post_id ) );
 		$type           = array_pop( $types );
 		$tags           = get_post_meta( $post_id, '_wp-parser_tags', true );
-		$all_deprecated = wp_filter_object_list( $tags, array( 'name' => 'deprecated' ) );
+		$deprecated = wp_filter_object_list( $tags, array( 'name' => 'deprecated' ) );
+		$deprecated = array_shift( $deprecated );
 
-		if ( empty( $all_deprecated ) ) {
+		if ( ! $deprecated ) {
 			return '';
 		}
 
-		$deprecated  = array_shift( $all_deprecated );
-		// Multi-@deprecated may have been defined, with the second actually having the deprecation text.
-		if ( empty( $deprecated['content'] ) ) {
-			$deprecated  = array_shift( $all_deprecated );
-		}
-		$description = empty( $deprecated['content'] ) ? '' : esc_html( $deprecated['content'] );
+		$deprecation_info = '';
 
-		return "<div class='deprecated'>"
-			. wp_kses_post( sprintf( __( 'Warning: This %s has been deprecated. %s', 'wporg' ), $type, $description ) )
-			. '</div>';
+		$referral = wp_filter_object_list( $tags, array( 'name' => 'see' ) );
+		$referral = array_shift( $referral );
+
+		// Construct message pointing visitor to preferred alternative, as provided
+		// via @see, if present.
+		if ( ! empty( $referral['refers'] ) ) {
+			$refers = sanitize_text_field( $referral['refers'] );
+
+			if ( $refers ) {
+				// For some reason, the parser may have dropped the parentheses, so add them.
+				if ( in_array( $type, array( 'function', 'method' ) ) && false === strpos( $refers, '()' ) ) {
+					$refers .= '()';
+				}
+				/* translators: %s: Linked internal element name */
+				$deprecation_info = ' ' . sprintf( __( 'Use %s instead.', 'wporg' ), \DevHub_Formatting::link_internal_element( $refers ) );
+			}
+		}
+
+		// If no alternative resource was referenced, use the deprecation string, if
+		// present.
+		if ( ! $deprecation_info && ! empty( $deprecated['content'] ) ) {
+			$deprecation_info = ' ' . sanitize_text_field ( $deprecated['content'] );
+			// Many deprecation strings use the syntax "Use function()" instead of the
+			// preferred "Use function() instead." Add it in if missing.
+			if ( false === strpos( $deprecation_info, 'instead' ) ) {
+				$deprecation_info .= ' instead.'; // Not making translatable since rest of string is not translatable.
+			}
+		}
+
+		/* translators: 1: parsed post post, 2: String for alternative function (if one exists) */
+		$contents = sprintf( __( 'This %1$s has been deprecated.%2$s', 'wporg' ),
+			$type,
+			$deprecation_info
+		);
+
+		// Use the 'warning' callout box if it's available. Otherwise, fall back to a theme-supported div class.
+		if ( class_exists( 'WPorg_Handbook_Callout_Boxes' ) ) {
+			$callout = new \WPorg_Handbook_Callout_Boxes();
+			$message = $callout->warning_shortcode( array(), $contents );
+		} else {
+			$message  = '<div class="deprecated">';
+			/** This filter is documented in wp-includes/post-template.php */
+			$message .= apply_filters( 'the_content', $contents );
+			$message .= '</div>';
+		}
+
+		return $message;
 	}
 
 	/**
@@ -896,7 +881,7 @@ namespace DevHub {
 		// Source file.
 		$source_file = get_source_file( $post_id );
 		if ( ! empty( $source_file ) ) {
-			$url = 'https://buddypress.trac.wordpress.org/browser/tags/' . get_current_version() . '/src/' . $source_file;
+			$url = 'https://core.trac.wordpress.org/browser/tags/' . get_current_version() . '/src/' . $source_file;
 			// Line number.
 			if ( $line_number = get_post_meta( get_the_ID(), '_wp-parser_line_num', true ) ) {
 				$url .= "#L{$line_number}";
@@ -1155,9 +1140,31 @@ namespace DevHub {
 		$summary = $post->post_excerpt;
 
 		if ( $summary ) {
-			add_filter( 'the_excerpt', 'htmlentities', 9 ); // Run before wpautop
+			// Backticks in excerpts are not automatically wrapped in code tags, so do so.
+			// e.g. https://developer.wordpress.org/reference/functions/convert_chars/
+			if ( false !== strpos( $summary, '`' ) ) {
+				$summary = preg_replace_callback(
+					'/`([^`]*)`/',
+					function ( $matches ) { return '<code>' . htmlentities( $matches[1] ) . '</code>'; },
+					$summary
+				);
+			}
+
+			// Fix https://developer.wordpress.org/reference/functions/get_extended/
+			// until the 'more' delimiter in summary is backticked.
+			$summary = str_replace( array( '<!--', '-->' ), array( '<code>&lt;!--', '--&gt;</code>' ), $summary );
+
+			// Fix standalone HTML tags that were not backticked.
+			// e.g. https://developer.wordpress.org/reference/hooks/comment_form/
+			if ( false !== strpos( $summary, '<' ) ) {
+				$summary = preg_replace_callback(
+					'/(\s)(<[^ >]+>)(\s)/',
+					function ( $matches ) { return $matches[1] . '<code>' . htmlentities( $matches[2] ) . '</code>' . $matches[3]; },
+					$summary
+				);
+			}
+
 			$summary = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $summary ) );
-			remove_filter( 'the_excerpt', 'htmlentities', 9 );
 		}
 
 		return $summary;
@@ -1184,61 +1191,6 @@ namespace DevHub {
 	}
 
 	/**
-	 * Formats the output of params defined using hash notation.
-	 *
-	 * This is a temporary measure until the parser parses the hash notation
-	 * into component elements that the theme could then handle and style
-	 * properly.
-	 *
-	 * Also, as a stopgap this is going to begin as a barebones hack to simply
-	 * keep the text looking like one big jumble.
-	 *
-	 * @param  string $text The content for the param.
-	 * @return string
-	 */
-	function param_formatting_fixup( $text ) {
-		// Don't do anything if this isn't a hash notation string.
-		if ( '{' != $text[0] ) {
-			return $text;
-		}
-
-		$new_text = '';
-		$text     = trim( substr( $text, 1, -1 ) );
-		$text     = str_replace( '@type', "\n@type", $text );
-
-		$in_list = false;
-		$parts = explode( "\n", $text );
-		foreach ( $parts as $part ) {
-			$part = preg_replace( '/\s+/', ' ', $part );
-			list( $wordtype, $type, $name, $description ) = explode( ' ', $part, 4 );
-
-			if ( '@type' != $wordtype ) {
-				if ( $in_list ) {
-					$in_list = false;
-					$new_text .= "</li></ul>\n";
-				}
-
-				$new_text .= $part;
-			} else {
-				if ( $in_list ) {
-					$new_text .= '<li>';
-				} else {
-					$new_text .= '<ul class="param-hash"><li>';
-					$in_list = true;
-				}
-
-				$new_text .= "<b>'" . substr( $name, 1 ) . "'</b><br /><i><span class='type'>({$type})</span></i> {$description}</li>\n";
-			}
-		}
-
-		if ( $in_list ) {
-			$new_text .= "</li></ul>\n";
-		}
-
-		return $new_text;
-	}
-
-	/**
 	 * Should the search bar be shown?
 	 *
 	 * @return bool True if search bar should be shown.
@@ -1247,7 +1199,7 @@ namespace DevHub {
 		$post_types = get_parsed_post_types();
 		$taxonomies = array( 'wp-parser-since', 'wp-parser-package', 'wp-parser-source-file' );
 
-		return ( is_singular( $post_types ) || is_post_type_archive( $post_types ) || is_tax( $taxonomies ) );
+		return ! is_search() && ( is_singular( $post_types ) || is_post_type_archive( $post_types ) || is_tax( $taxonomies ) || get_query_var( 'is_handbook' ) );
 	}
 
 	/**
@@ -1308,4 +1260,109 @@ namespace DevHub {
 		}
 		return get_post_field( $field, $explanation, $context );
 	}
+
+	/**
+	 * Generates a private access message for a private element.
+	 *
+	 * @param int|WP_Post $post Optional. Post object or ID. Default global `$post`.
+	 * @return string Private access message if the given reference is considered "private".
+	 */
+	function get_private_access_message( $post = null ) {
+		if ( ! $post = get_post( $post ) ) {
+			return '';
+		}
+
+		// Currently only handling private access messages for functions and hooks.
+		if ( ! in_array( get_post_type( $post ), array( 'wp-parser-function', 'wp-parser-hook' ) ) ) {
+			return '';
+		}
+
+		$tags        = get_post_meta( $post->ID, '_wp-parser_tags', true );
+		$access_tags = wp_filter_object_list( $tags, array(
+			'name'    => 'access',
+			'content' => 'private'
+		) );
+
+		// Bail if it isn't private.
+		if ( empty( $access_tags ) ) {
+			return '';
+		}
+
+		$referral = wp_filter_object_list( $tags, array( 'name' => 'see' ) );
+		$referral = array_shift( $referral );
+
+		if ( ! empty( $referral['refers'] ) ) {
+			$refers = sanitize_text_field( $referral['refers'] );
+
+			if ( ! empty( $refers ) ) {
+				/* translators: 1: Linked internal element name */
+				$alternative_string = sprintf( __( ' Use %s instead.', 'wporg' ), \DevHub_Formatting::link_internal_element( $refers ) );
+			}
+		} else {
+			$alternative_string = '';
+		}
+
+		/* translators: 1: String for alternative function (if one exists) */
+		$contents = sprintf( __( 'This function&#8217;s access is marked private. This means it is not intended for use by plugin or theme developers, only in other core functions. It is listed here for completeness.%s', 'wporg' ),
+			$alternative_string
+		);
+
+		// Use the 'alert' callout box if it's available. Otherwise, fall back to a theme-supported div class.
+		if ( class_exists( 'WPorg_Handbook_Callout_Boxes' ) ) {
+			$callout = new \WPorg_Handbook_Callout_Boxes();
+			$message = $callout->alert_shortcode( array(), $contents );
+		} else {
+			$message  = '<div class="private-access">';
+			/** This filter is documented in wp-includes/post-template.php */
+			$message .= apply_filters( 'the_content', $contents );
+			$message .= '</div>';
+		}
+
+		return $message;
+	}
+
+	/**
+	 * Displays a post type filter dropdown on taxonomy pages. 
+	 * 
+	 * @return string HTML filter form.
+	 */
+	function taxonomy_archive_filter() {
+		global $wp_rewrite;
+
+		$taxonomies = array( 'wp-parser-since', 'wp-parser-package', 'wp-parser-source-file' );
+		$taxonomy   = get_query_var( 'taxonomy' );
+		$term       = get_query_var( 'term' );
+
+		if ( ! ( is_tax() && in_array( $taxonomy, $taxonomies ) ) ) {
+			return;
+		}
+
+		$post_types  = get_parsed_post_types( 'labels' );
+		$post_types  = array( 'any' => __( 'Any type', 'wporg' ) ) + $post_types;
+
+		$qv_post_type = array_filter( (array) get_query_var( 'post_type' ) );
+		$qv_post_type = $qv_post_type ? $qv_post_type : array( 'any' );
+
+		$options = '';
+		foreach ( $post_types as $post_type => $label ) {
+			$selected = in_array( $post_type, $qv_post_type ) ? " selected='selected'" : '';
+			$options .= "\n\t<option$selected value='" . esc_attr( $post_type ) . "'>$label</option>";
+		}
+
+		$form = "<form method='get' class='archive-filter-form' action=''>";
+
+		if ( ! $wp_rewrite->using_permalinks() ) {
+			// Add taxonomy and term when not using permalinks.
+			$form .= "<input type='hidden' name='" . esc_attr( $taxonomy ) . "' value='" . esc_attr( $term ) . "'>";
+		}
+		
+		$form .= "<label for='archive-filter'>";
+		$form .= __( 'Filter by type:', 'wporg' ) . ' ';
+		$form .= '<select name="post_type[]" id="archive-filter">';
+		$form .= $options . '</select></label>';
+		$form .= "<input class='shiny-blue' type='submit' value='Filter' /></form>";
+
+		echo $form;
+	}
 }
+

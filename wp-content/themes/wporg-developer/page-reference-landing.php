@@ -35,7 +35,7 @@ get_header(); ?>
 
 				<div class="new-in-guide section two-columns clear">
 					<div class="widget box gray">
-						<h3 class="widget-title"><?php $version = DevHub\get_current_version_term(); printf( __( 'New &amp; Updated in BuddyPress %s:', 'wporg' ), substr( $version->name, 0, -2 ) ); ?></h3>
+						<h3 class="widget-title"><?php $version = DevHub\get_current_version_term(); printf( __( 'New &amp; Updated in WordPress %s:', 'wporg' ), substr( $version->name, 0, -2 ) ); ?></h3>
 						<div class="widget-content">
 							<ul class="unordered-list no-bullets">
 								<?php
@@ -67,6 +67,19 @@ get_header(); ?>
 						<div class="widget-content">
 							<ul class="unordered-list no-bullets">
 								<li><a href="https://codex.wordpress.org/Dashboard_Widgets_API">Dashboard widgets</a></li>
+								<li><a href="https://codex.wordpress.org/Database_API">Database</a></li>
+								<li><a href="https://codex.wordpress.org/HTTP_API">HTTP API</a></li>
+								<li><a href="https://codex.wordpress.org/Filesystem_API">Filesystem</a></li>
+								<li><a href="https://codex.wordpress.org/Metadata_API">Metadata</a></li>
+								<li><a href="https://codex.wordpress.org/Options_API">Options</a></li>
+								<li><a href="https://codex.wordpress.org/Plugin_API">Plugins</a></li>
+								<li><a href="https://codex.wordpress.org/Quicktags_API">Quicktags</a></li>
+								<li><a href="https://codex.wordpress.org/Rewrite_API">Rewrite</a></li>
+								<li><a href="https://codex.wordpress.org/Settings_API">Settings</a></li>
+								<li><a href="https://codex.wordpress.org/Shortcode_API">Shortcode</a></li>
+								<li><a href="https://codex.wordpress.org/Theme_Modification_API">Theme Modification</a></li>
+								<li><a href="https://codex.wordpress.org/Transients_API">Transients</a></li>
+								<li><a href="https://codex.wordpress.org/XML-RPC_WordPress_API">XML-RPC</a></li>
 							</ul>
 						</div>
 					</div>

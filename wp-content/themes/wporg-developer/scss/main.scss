@@ -2,6 +2,7 @@
 @import "global";
 
 .home .devhub-wrap {
+	padding-bottom: 0;
 	#content {
 		padding: 0;
 	}
@@ -672,6 +673,17 @@
 		}
 	}
 
+	.archive-filter-form {
+		margin: 5rem 0;
+		font-size: 1.5rem;
+		input[type="submit"] {
+			margin-left: .5em;
+			padding: 0.2em 0.5em;
+			line-height: 1;
+			font-size: 1.5rem;
+		}
+	}
+
 	.searchform {
 		overflow: hidden;
 		height: auto;
@@ -948,30 +960,35 @@
 		font-style: italic;
 		font-weight: 300;
 	}
+	.handbook {
+		h1 {
+			margin: 24px 0;
+			font-size: 20px;
+			font-weight: normal;
+		}
+	}
 	.wp-parser-class, .wp-parser-function, .wp-parser-hook, .wp-parser-method {
 		border-bottom: 1px solid #dfdfdf;
 
 		h1 {
 			margin: 24px 0;
 			padding-left: 100px;
-			a {
-				margin-left: -100px;
-				color: #24831d;
-				font-family: $code-font;
-				font-size: 20px;
-				.hook-func {
-					color: #888888;
-				}
-				.arg-type {
-					color: #cd2f23;
-					font-style: italic;
-				}
-				.arg-name {
-					color: #0f55c8;
-				}
-				.arg-default {
-					color: #000000;
-				}
+			text-indent: -100px;
+			color: #24831d;
+			font-family: $code-font;
+			font-size: 20px;
+			.hook-func {
+				color: #888888;
+			}
+			.arg-type {
+				color: #cd2f23;
+				font-style: italic;
+			}
+			.arg-name {
+				color: #0f55c8;
+			}
+			.arg-default {
+				color: #000000;
 			}
 			a:hover {
 				border-bottom: 1px dotted #21759b;
@@ -1001,6 +1018,9 @@
 			.param-hash {
 				margin-left: 1.2em;
 				margin-bottom: 0.5em;
+				li {
+					margin-top: 1em;
+				}
 			}
 		}
 		.learn-more {
@@ -1009,26 +1029,41 @@
 			border-radius: 5px;
 			padding: 20px;
 		}
-		.deprecated {
-			background-color: #be2423;
-			border: 1px solid #a4322f;
+		.deprecated,
+		.private-access {
+			margin-top: 30px;
 			padding: 20px;
-			color: #ffffff;
+			p {
+				margin-bottom: 0px;
+			}
+		}
+		.deprecated {
+			background-color: #fbeaea;
+			border: 1px solid #dc3232;
 		}
 		.deprecated-method {
 			color: #be2423;
 			font-style: italic;
 		}
+		.private-access {
+			border: 1px solid #ffb900;
+			background-color: #fff8e5;
+		}
+		.callout {
+			margin-top: 30px;
+		}
+	}
+
+	.callout:before {
+		top: 0.2em;
 	}
 
 	&.archive, &.search {
 		.wp-parser-class, .wp-parser-function, .wp-parser-hook, .wp-parser-method {
 			h1 {
-				a {
-					font-family: $body-font;
-					color: #21759b;
-					font-weight: normal;
-				}
+				font-family: $body-font;
+				color: #21759b;
+				font-weight: normal;
 			}
 			div {
 				&.sourcefile {
@@ -1065,6 +1100,7 @@
 			line-height: 1.7; /* Slightly increase the line height for more readability */
 			list-style-type: none;
 			margin: 0;
+			overflow-x: auto;
 		}
 
 		.show-more, .hide-more {
@@ -1127,12 +1163,17 @@
 
 		.comment-list li {
 			padding: 2rem 1.5rem 1rem;
-			border: 0 solid #eee;
-			border-bottom-width: 1px;
 			background: #fff;
+			overflow: auto;
 
 			&:first-child {
 				padding-top: 1rem;
+			}
+
+			article {
+				border-bottom: 1px solid #dfdfdf;
+				padding-bottom: 1em;
+				overflow: auto;
 			}
 		}
 
@@ -1310,7 +1351,7 @@
 
 	}
 
-	nav.post-navigation .nav-links a {
+	nav.handbook-navigation .nav-links a {
 		width: 49%;
 		display: inline-block;
 		&[rel="prev"] {
@@ -1537,9 +1578,7 @@
 		.wp-parser-class, .wp-parser-function, .wp-parser-hook, .wp-parser-method {
 			h1 {
 				padding-left: 45px;
-				a {
-					margin-left: -45px;
-				}
+				text-indent: -45px;
 			}
 		}
 
@@ -1555,6 +1594,43 @@
 			.uses {
 				padding-left: 0;
 				margin-top: 30px;
+			}
+		}
+	}
+}
+
+@media (max-width: 22em) {
+	ul, ol {
+		margin-left: 1.2em;
+	}
+	.devhub-wrap {
+		.wp-parser-class, .wp-parser-function, .wp-parser-hook, .wp-parser-method {
+			h1 {
+				padding-left: 20px;
+				line-height: 2rem;
+				text-indent: -20px;
+				font-size: 16px;
+			}
+		}
+
+		&.single-wp-parser-function, &.single-wp-parser-method, &.single-wp-parser-hook {
+			.comment-list {
+				li {
+					padding-left: 0;
+					padding-right: 0;
+				}
+
+				.avatar {
+					margin: 0 1em 0 0;
+				}
+			}
+		}
+
+		.source-code-links {
+			margin-left: 0;
+
+			span:first-child {
+				margin-left: 0;
 			}
 		}
 	}
