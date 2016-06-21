@@ -3,7 +3,7 @@
 <head profile="http://gmpg.org/xfn/11">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BuddyPress</title>
+<title>bbPress</title>
 <meta name="referrer" content="always">
 <link href="//s.w.org/wp-includes/css/dashicons.css?20150710" rel="stylesheet" type="text/css" />
 <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
@@ -43,13 +43,13 @@ var toggleMenu = function(){
 
 	<div id="header"><div id="header-inner">
 		<ul id="nav" class="menu">
-			<li id="menu-item-251086" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251086"><a href="https://buddypress.org/about/">About</a></li>
-			<li id="menu-item-251087" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-251087"><a href="https://codex.buddypress.org/">Documentation</a></li>
-			<li id="menu-item-251088" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251088"><a href="https://buddypress.org/blog/">News</a></li>
-			<li id="menu-item-252086" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-252086"><a href="https://codex.buddypress.org/participate-and-contribute/">Get Involved</a></li>
-			<li id="menu-item-251089" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251089"><a href="https://buddypress.org/support/">Support</a></li>
-			<li id="menu-item-251090" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251090"><a href="https://buddypress.org/download/">Download</a></li>
+			<li id="menu-item-251086" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251086"><a href="https://bbpress.org/about/">About</a></li>
+			<li id="menu-item-251087" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-251087"><a href="https://codex.bbpress.org/">Documentation</a></li>
+			<li id="menu-item-251088" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251088"><a href="https://bbpress.org/blog/">News</a></li>
+			<li id="menu-item-252086" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-252086"><a href="https://codex.bbpress.org/participate-and-contribute/">Get Involved</a></li>
+			<li id="menu-item-251089" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251089"><a href="https://bbpress.org/forums/">Support</a></li>
+			<li id="menu-item-251090" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251090"><a href="https://bbpress.org/download/">Download</a></li>
 		</ul>
-		<h1><a href="https://buddypress.org">BuddyPress.org</a></h1>
+		<h1><a href="https://bbpress.org">bbPress.org</a></h1>
 	</div></div>
 	<hr class="hidden" />

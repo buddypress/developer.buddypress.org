@@ -214,8 +214,8 @@
 					<li>
 						<strong><?php _e( 'Since:', 'wporg' ); ?></strong>
 						<?php printf(
-							/* translators: %s: BuddyPress version */
-							__( 'BuddyPress %s', 'wporg' ),
+							/* translators: %s: bbPress version */
+							__( 'bbPress %s', 'wporg' ),
 							sprintf( '<a href="%1$s">%2$s</a>', esc_url( $data['since_url'] ), esc_html( $version ) )
 						); ?>
 						<?php echo $data['description']; // escaped in get_changelog_data() ?>
