@@ -17,7 +17,7 @@ get_header(); ?>
 				<div class="inner-wrap two-columns">
 					<div class="widget box box-left transparent" style="color:#999;">
 						<h3 class="widget-title" style="color:#999;"><div class="dashicons dashicons-welcome-widgets-menus"></div><?php _e( 'Themes', 'wporg' ); ?></h3>
-						<p class="widget-description"><?php _e( 'Want to know all there is to know about theming and BuddyPress?', 'wporg' ); ?></p>
+						<p class="widget-description"><?php _e( 'Want to know all there is to know about theming and bbPress?', 'wporg' ); ?></p>
 						<?php if ( is_user_member_of_blog() ) : ?>
 						<a href="<?php esc_attr_e( get_post_type_archive_link( 'theme-handbook' ) ); ?>" class="themes-go get-started go button"><?php _e( 'Develop Themes ', 'wporg' ); ?><span class="dashicons dashicons-arrow-right-alt2"></span></a>
 						<?php else :?>
@@ -89,7 +89,7 @@ get_header(); ?>
 					<?php } ?>
 
 					<div class="widget box">
-						<h4 class="widget-title"><a href="https://make.wordpress.org/"><?php _e( 'Help Make BuddyPress ', 'wporg' ); ?><div class="dashicons dashicons-arrow-right-alt2"></div></a></h4>
+						<h4 class="widget-title"><a href="https://make.wordpress.org/"><?php _e( 'Help Make bbPress ', 'wporg' ); ?><div class="dashicons dashicons-arrow-right-alt2"></div></a></h4>
 					</div>
 				</div>
 			</div>

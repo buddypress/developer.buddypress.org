@@ -18,7 +18,7 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 			<div class="reference-landing">
 				<div class="search-guide section clear">
-					<h4 class="ref-intro"><?php _e( 'Want to know what&#39;s going on inside BuddyPress? Search the Code Reference for more information about BuddyPress&#39; functions, classes, methods, and hooks.', 'wporg' ); ?></h4>
+					<h4 class="ref-intro"><?php _e( 'Want to know what&#39;s going on inside bbPress? Search the Code Reference for more information about bbPress&#39; functions, classes, methods, and hooks.', 'wporg' ); ?></h4>
 					<h3 class="search-intro"><?php _e( 'Try it out:', 'wporg' ); ?></h3>
 					<?php get_search_form(); ?>
 				</div><!-- /search-guide -->
@@ -35,14 +35,14 @@ get_header(); ?>
 
 				<div class="new-in-guide section two-columns clear">
 					<div class="widget box gray">
-						<h3 class="widget-title"><?php $version = BuddyDevHub\get_current_version_term(); printf( __( 'New &amp; Updated in BuddyPress %s:', 'wporg' ), substr( $version->name, 0, -2 ) ); ?></h3>
+						<h3 class="widget-title"><?php $version = bbPressDevHub\get_current_version_term(); printf( __( 'New &amp; Updated in bbPress %s:', 'wporg' ), substr( $version->name, 0, -2 ) ); ?></h3>
 						<div class="widget-content">
 							<ul class="unordered-list no-bullets">
 								<?php
 
 								$list = new WP_Query( array(
 									'posts_per_page' => 13,
-									'post_type'      => BuddyDevHub\get_parsed_post_types(),
+									'post_type'      => bbPressDevHub\get_parsed_post_types(),
 									'orderby'        => 'title',
 									'order'          => 'ASC',
 									'tax_query'      => array( array(

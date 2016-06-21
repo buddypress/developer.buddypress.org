@@ -183,7 +183,7 @@ namespace {
 
 }
 
-namespace BuddyDevHub {
+namespace bbPressDevHub {
 
 	function wp_doc_comment( $comment, $args, $depth ) {
 		?>
@@ -231,7 +231,7 @@ namespace BuddyDevHub {
 	 *
 	 * Prefers the 'wp_parser_imported_wp_version' option value set by more
 	 * recent versions of the parser. Failing that, it checks the
-	 * BP_CORE_LATEST_RELEASE constant (set on WordPress.org) though this is not
+	 * BBP_CORE_LATEST_RELEASE constant (set on WordPress.org) though this is not
 	 * guaranteed to be the latest parsed version. Failing that, it uses
 	 * the WP version of the site, unless it isn't a release version, in
 	 * which case a hardcoded value is assumed.
@@ -245,8 +245,8 @@ namespace BuddyDevHub {
 		$current_version = get_option( 'wp_parser_imported_wp_version' );
 
 		// Otherwise, assume the value stored in a constant (which is set on WP.org), if defined.
-		if ( empty( $current_version ) && defined( 'BP_CORE_LATEST_RELEASE' ) && BP_CORE_LATEST_RELEASE ) {
-			$current_version = BP_CORE_LATEST_RELEASE;
+		if ( empty( $current_version ) && defined( 'BBP_CORE_LATEST_RELEASE' ) && BBP_CORE_LATEST_RELEASE ) {
+			$current_version = BBP_CORE_LATEST_RELEASE;
 		}
 
 		// Otherwise, use the version of the running WP instance.
@@ -846,7 +846,7 @@ namespace BuddyDevHub {
 		// Source file.
 		$source_file = get_source_file( $post_id );
 		if ( ! empty( $source_file ) ) {
-			$url = 'https://buddypress.trac.wordpress.org/browser/tags/' . get_current_version() . '/src/' . $source_file;
+			$url = 'https://bbpress.trac.wordpress.org/browser/tags/' . get_current_version() . '/src/' . $source_file;
 			// Line number.
 			if ( $line_number = get_post_meta( get_the_ID(), '_wp-parser_line_num', true ) ) {
 				$url .= "#L{$line_number}";
