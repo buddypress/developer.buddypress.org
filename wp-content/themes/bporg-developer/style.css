@@ -34,3 +34,10 @@ and Blueprint http://www.blueprintcss.org/
 .devhub-wrap .site-header {
 	margin-bottom: 2em;
 }
+.devhub-wrap.single div#inner-search, .devhub-wrap.archive div#inner-search {
+	background-color: rgb(193, 64, 59);
+	border-bottom: 1px solid rgb(158, 22, 17);
+}
+.devhub-wrap.single div#inner-search div#inner-search-icon-container div#inner-search-icon, .devhub-wrap.archive div#inner-search div#inner-search-icon-container div#inner-search-icon {
+	background-color: rgb(193, 64, 59);
+}
