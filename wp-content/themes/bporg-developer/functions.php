@@ -1,6 +1,7 @@
 <?php
 
-require __DIR__ . '/inc/template-tags.php';
+require get_stylesheet_directory() . '/inc/template-tags.php';
+#require_once get_template_directory() . '/inc/handbooks.php';
 
 function bporg_developer_enqueue_css() {
 	$parent = 'wpdeveloper';
