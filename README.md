@@ -18,7 +18,7 @@ Please make sure you have [WP-CLI](http://wp-cli.org/) installed and working. Yo
 8. Run the command `wp parser create . --user=1`. This will take awhile as it works through the entire BuddyPress core code.
 	1. The single period indicates it should parse from the current directory. In this case, the `buddypress` folder.
 	2. The `--user=1` parameter assigns the newly created posts to user ID 1.
-	3. See wp help parser for all available options.
-	
+	3. See `wp help parser` for all available options.
+
 At this point, the parser will do its work and you can start looking around the site.
 
