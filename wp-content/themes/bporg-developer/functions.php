@@ -18,3 +18,9 @@ function bporg_developer_enqueue_css() {
 	wp_enqueue_style( $child, get_stylesheet_directory_uri() . '/style.css', array( $parent, 'wp-dev-sass-compiled' ) );
 }
 add_action( 'wp_enqueue_scripts', 'bporg_developer_enqueue_css' );
+
+function bporg_developer_body_classes( $classes ) {
+	$classes[] = 'bp-developer';
+	return $classes;
+}
+add_filter( 'body_class', 'bporg_developer_body_classes' );
