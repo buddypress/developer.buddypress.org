@@ -13,12 +13,12 @@ Please make sure you have [WP-CLI](http://wp-cli.org/) installed and working. Yo
 5. Install the following plugins:
 	1. [BuddyPress](https://www.wordpress.org/plugins/buddypress) by BuddyPress Community
 	2. [SyntaxHighlighter Evolved](https://wordpress.org/plugins/syntaxhighlighter/) by Viper007Bond
-6. Log in to the install and activate the WP-Parser, BuddyPress, and SyntaxHighlighter Evolved plugins.
+6. Open a terminal and run `composer install` in the WP-Parser plugin folder to install the necessary files.
+6. Log in to activate the WP-Parser, BuddyPress, and SyntaxHighlighter Evolved plugins.
 7. Open a terminal prompt and change your present working directory to the BuddyPress folder in your plugins folder.
 8. Run the command `wp parser create . --user=1`. This will take awhile as it works through the entire BuddyPress core code.
 	1. The single period indicates it should parse from the current directory. In this case, the `buddypress` folder.
 	2. The `--user=1` parameter assigns the newly created posts to user ID 1.
 	3. See `wp help parser` for all available options.
 
-At this point, the parser will do its work and you can start looking around the site.
-
+At this point, the parser will be done with its work and you can start looking around the site.

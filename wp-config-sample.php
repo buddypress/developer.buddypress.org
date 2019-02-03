@@ -80,10 +80,10 @@ $table_prefix  = 'wp_';
 define('WP_DEBUG', true);
 
 define( 'BPORGPATH', __DIR__ . '/wp-content/themes/' );
-define( 'BP_CORE_LATEST_RELEASE', '2.7.2' );
+define( 'BP_CORE_LATEST_RELEASE', '4.1.0' );
 
 define( 'WPORGPATH', __DIR__ . '/wp-content/themes/' );
-define( 'WP_CORE_LATEST_RELEASE', '4.6.1' );
+define( 'WP_CORE_LATEST_RELEASE', '5.0.3' );
 
 /* That's all, stop editing! Happy blogging. */
 
